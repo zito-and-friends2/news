@@ -43,7 +43,7 @@ def findF():
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     driver = webdriver.Chrome(options=options)
-    
+
 
     try:
         res = rq.get(KEYWORD_URL).text
@@ -53,21 +53,21 @@ def findF():
         for i in range(0, 10):
             keyword = list["top10"][i]["keyword"]
             news = rq.get(NEWS_URL + keyword + NEWS_PARAM, headers=headers).text
-         
 
-            
+
+
             news = json.loads(news)
 
-            
+
             if "items" not in news:
                 print(f"경고: '{keyword}'에 대한 'items' 키가 없습니다. 해당 키워드를 건너뜁니다.")
-                continue 
+                continue
 
             print(keyword)
             for j in range(0, 10):
 
                 if "naver.com" in news["items"][j]["link"]:
-                  
+
                     title = news["items"][j]["title"]
                     clean_title = re.sub(r'<.*?>', '', title)
 
@@ -88,7 +88,7 @@ def findF():
                     print("제목 : " + clean_title)
                     print("주소 : " + originallink)
                     print("날짜 : " + pubdate)
-                    
+
 
                     if "entertain" in url or "sports" in url:
                         article, image = get_news_article_text_selenium(url, driver)
@@ -119,26 +119,26 @@ def findF():
                     print(summary_keywords)
 
                     data = {
-                                "title": clean_title,
-                                "pub_date": str(pubdate),
-                                "content": summary_sentence,
-                                "org_link": originallink,
-                                "category": categories,
-                                "img_url" : image,
-                                "keyword" : keyword,
-                                "hashtag" : summary_keywords
+                        "title": clean_title,
+                        "pub_date": str(pubdate),
+                        "content": summary_sentence,
+                        "org_link": originallink,
+                        "category": categories,
+                        "img_url" : image,
+                        "keyword" : keyword,
+                        "hashtag" : summary_keywords
 
                     }
 
                     headers2 = {
-                                "Content-Type": "application/json"
+                        "Content-Type": "application/json"
                     }
 
                     response = rq.post(API_URL, headers=headers2, json=data)
                     print(response.text)
                     break
 
-                    
+
 
 
     finally:
@@ -251,11 +251,11 @@ schedule.every().day.at("11:00").do(findF)
 schedule.every().day.at("12:00").do(findF)
 schedule.every().day.at("13:00").do(findF)
 schedule.every().day.at("14:00").do(findF)
-schedule.every().day.at("15:11").do(findF)
+schedule.every().day.at("15:00").do(findF)
 schedule.every().day.at("16:00").do(findF)
 schedule.every().day.at("17:00").do(findF)
-schedule.every().day.at("18:00").do(findF)
-schedule.every().day.at("19:00").do(findF)
+schedule.every().day.at("17:02").do(findF)
+schedule.every().day.at("17:20").do(findF)
 schedule.every().day.at("20:00").do(findF)
 schedule.every().day.at("21:00").do(findF)
 schedule.every().day.at("22:00").do(findF)
